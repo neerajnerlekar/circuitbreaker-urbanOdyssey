@@ -1,6 +1,6 @@
 "use client";
 
-import {  useState } from "react";
+import {  useState ,useEffect} from "react";
 import TextInput from "../../../components/scaffold-eth/Input/TextInput";
 import { FormProvider, useForm } from "react-hook-form";
 
@@ -24,6 +24,12 @@ export default function Home() {
     console.log("Form data submitted", e);
     // Remember to handle the image upload process here
   };
+
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition((e) => {
+        console.log(e);
+    });
+  }, []);
   return (
     <div className="container mx-auto px-4 py-8">
       <FormProvider {...methods}>
