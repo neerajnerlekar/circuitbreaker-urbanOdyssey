@@ -1,13 +1,11 @@
 "use client";
 
-import dynamic from "next/dynamic";
+
 import Link from "next/link";
 import type { NextPage } from "next";
 import { BugAntIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import DynamicMap from "../components/Map";
 
-const DynamicMap = dynamic(() => import("../components/Map"), {
-  loading: () => <p>Loading...</p>,
-});
 
 const Home: NextPage = () => {
   return (
