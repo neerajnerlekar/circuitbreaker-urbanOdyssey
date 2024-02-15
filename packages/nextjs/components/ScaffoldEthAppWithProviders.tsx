@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { RainbowKitProvider, darkTheme, lightTheme } from "@rainbow-me/rainbowkit";
 import { Toaster } from "react-hot-toast";
 import { WagmiConfig } from "wagmi";
+import { useAccount } from "wagmi";
 import { Footer } from "~~/components/Footer";
 import { Header } from "~~/components/Header";
 import { BlockieAvatar } from "~~/components/scaffold-eth";
@@ -17,7 +19,19 @@ import { appChains } from "~~/services/web3/wagmiConnectors";
 const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
   const price = useNativeCurrencyPrice();
   const setNativeCurrencyPrice = useGlobalState(state => state.setNativeCurrencyPrice);
-
+  const { isConnected } = useAccount();
+  const router = useRouter();
+  useEffect(() => {
+    if (isConnected) {
+      // Redirect to the new page if the wallet is connected
+      router.push("/wallet");
+    }
+    else
+    {
+      // Redirect to the new page if the wallet is disconnected
+      router.push("/");
+    }
+  }, [isConnected, router]);
   useEffect(() => {
     if (price > 0) {
       setNativeCurrencyPrice(price);
