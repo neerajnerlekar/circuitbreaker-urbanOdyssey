@@ -28,6 +28,7 @@
     "react": "latest",
     "react-copy-to-clipboard": "^5.1.0",
     "react-dom": "latest",
+    "react-hook-form": "^7.50.1",
     "react-hot-toast": "^2.4.0",
     "react-leaflet": "^4.2.1",
     "use-debounce": "^8.0.4",
