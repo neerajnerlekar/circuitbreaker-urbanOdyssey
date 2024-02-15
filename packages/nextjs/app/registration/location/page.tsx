@@ -1,12 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import {  useState } from "react";
 import TextInput from "../../../components/scaffold-eth/Input/TextInput";
 import { FormProvider, useForm } from "react-hook-form";
 
 export default function Home() {
   const methods = useForm();
-  const onSubmit = data => console.log(data);
 
   const [selectedImage, setSelectedImage] = useState(null);
 
@@ -21,9 +20,8 @@ export default function Home() {
   };
 
   const handleSubmit = e => {
- 
     // Form submission logic here
-    console.log("Form data submitted",e);
+    console.log("Form data submitted", e);
     // Remember to handle the image upload process here
   };
   return (
