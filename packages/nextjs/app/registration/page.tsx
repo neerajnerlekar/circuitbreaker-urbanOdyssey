@@ -2,11 +2,21 @@
 
 import { FormProvider, useForm } from "react-hook-form";
 import TextInput from "~~/components/scaffold-eth/Input/TextInput";
-
+import {useState} from "react";
 export default function Home() {
   const methods = useForm();
   const onSubmit = data => console.log(data);
+  const [selectedImage, setSelectedImage] = useState(null);
 
+  const handleImageChange = e => {
+    if (e.target.files && e.target.files[0]) {
+      const img = e.target.files[0];
+      setSelectedImage({
+        imageFile: img,
+        previewURL: URL.createObjectURL(img),
+      });
+    }
+  };
   return (
     <div className="container mx-auto px-4 py-8">
       <FormProvider {...methods}>
@@ -32,6 +42,30 @@ export default function Home() {
             </div>
 
             <TextInput name="country" label="Country" type="text" />
+
+
+            <div className="mb-4">
+              <label className="block text-gray-700 text-sm font-bold mb-2">Upload Image</label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="block w-full text-sm text-gray-500
+            file:mr-4 file:py-2 file:px-4
+            file:rounded-full file:border-0
+            file:text-sm file:font-semibold
+            file:bg-blue-50 file:text-blue-700
+            hover:file:bg-blue-100
+          "
+              />
+            </div>
+            {/* Image Preview */}
+            {selectedImage && (
+              <div className="mb-4">
+                <p className="block text-gray-700 text-sm font-bold mb-2">Preview</p>
+                <img src={selectedImage.previewURL} alt="Preview" className="max-w-xs max-h-64" />
+              </div>
+            )}
           </div>
           <div className="flex justify-center">
             <button
