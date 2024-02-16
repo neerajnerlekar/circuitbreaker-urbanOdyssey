@@ -3,10 +3,20 @@ pragma solidity ^0.8.17;
 
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/utils/Address.sol";
 import "./lib/Structs.sol";
 import "./storage/OdysseyStorage.sol";
 
+// ERC-1271 interface
+interface IERC1271 {
+	function isValidSignature(
+		bytes32 hash,
+		bytes memory signature
+	) external view returns (bytes4 magicValue);
+}
+
 contract UrbanOdyssey is ERC1155, Ownable, OdysseyStorage {
+	using Address for address;
 	// URIs for each token type
 	mapping(uint256 => string) private tokenURIs;
 
@@ -22,13 +32,45 @@ contract UrbanOdyssey is ERC1155, Ownable, OdysseyStorage {
 	function registerPlayer(
 		string memory _name,
 		string memory _homeTown,
-		bytes32 _msgHash,
-		bytes32 _signature,
+		address sender,
+		bytes32 messageHash,
+		bytes32 signature,
 		Structs.Faction _faction
 	) public {
 		require(!isRegistered[msg.sender], "Player is already registered.");
 		// verify the transaction is sent from our client
+		bool isSmartContract;
+		assembly {
+			isSmartContract := gt(extcodesize(sender), 0)
+		}
 		// use ecrecover to check the signer is our deployer
+		// If it's a smart contract, use ERC1271 to verify the signature
+		if (isSmartContract) {
+			// Assume the sender implements ERC1271 and cast to the interface
+			IERC1271 erc1271 = IERC1271(sender);
+			bytes memory signatureBytes = abi.encodePacked(signature);
+			require(
+				erc1271.isValidSignature(messageHash, signatureBytes) ==
+					MAGICVALUE,
+				"Invalid signature"
+			);
+		} else {
+			// If it's an EOA, use ecrecover to verify the signature
+			bytes32 r;
+			bytes32 s;
+			uint8 v;
+
+			// Assuming signature is a bytes variable containing the signature
+			assembly {
+				r := mload(add(signature, 32))
+				s := mload(add(signature, 64))
+				v := byte(0, mload(add(signature, 96)))
+			}
+			bytes32 prefixedHash = prefixed(messageHash);
+			address recovered = ecrecover(prefixedHash, v, r, s);
+			require(recovered == sender, "Invalid signature");
+		}
+
 		// update the player struct with values according to params
 		// use _mint() to grant player +100 Energy/Chip based on their faction
 
@@ -87,6 +129,16 @@ contract UrbanOdyssey is ERC1155, Ownable, OdysseyStorage {
 	function uri(uint256 tokenId) public view override returns (string memory) {
 		return tokenURIs[tokenId];
 	}
+
+	function prefixed(bytes32 hash) internal pure returns (bytes32) {
+		return
+			keccak256(
+				abi.encodePacked("\x19Ethereum Signed Message:\n32", hash)
+			);
+	}
+
+	// Magic value defined by EIP-1271
+	bytes4 private constant MAGICVALUE = 0x1626ba7e;
 
 	// Function to get a player's Energy balance
 	function getENERGYBalance(address _player) external view returns (uint256) {
