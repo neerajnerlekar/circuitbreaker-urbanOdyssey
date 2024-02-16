@@ -25,9 +25,7 @@ const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
     if (isConnected) {
       // Redirect to the new page if the wallet is connected
       // router.push("/wallet");
-    }
-    else
-    {
+    } else {
       // Redirect to the new page if the wallet is disconnected
       // router.push("/");
     }

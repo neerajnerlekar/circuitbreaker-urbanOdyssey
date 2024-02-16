@@ -4,8 +4,8 @@ import React from "react";
 import "leaflet/dist/leaflet.css";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 
-const Map = () => {
-  const position = [51.505, -0.09]; // Example position: London
+const Map = ({position = [51.505, -0.09]}) => {
+
 
   if (typeof window === "undefined") return;
 

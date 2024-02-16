@@ -1,6 +1,6 @@
 "use client";
 
-import {  useState ,useEffect} from "react";
+import { useEffect, useState } from "react";
 import TextInput from "../../../components/scaffold-eth/Input/TextInput";
 import { FormProvider, useForm } from "react-hook-form";
 
@@ -8,7 +8,7 @@ export default function Home() {
   const methods = useForm();
 
   const [selectedImage, setSelectedImage] = useState(null);
-
+  const [location, setLocation] = useState(null);
   const handleImageChange = e => {
     if (e.target.files && e.target.files[0]) {
       const img = e.target.files[0];
@@ -26,8 +26,9 @@ export default function Home() {
   };
 
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition((e) => {
-        console.log(e);
+    navigator.geolocation.getCurrentPosition(e => {
+      console.log(e);
+      setLocation(e);
     });
   }, []);
   return (
@@ -39,8 +40,9 @@ export default function Home() {
         >
           <div className="mb-4">
             <TextInput name="name" label="Name" type="text" />
-            <TextInput name="address" label="Address" type="text" />
-            <TextInput name="city" label="City" type="text" />
+            <TextInput name="place" label="Type of Place" type="text" />
+            Your Location: Latitude :{location && location.coords.latitude}, Longitude :
+            {location && location.coords.longitude}
             <div className="mb-4">
               <label className="block text-gray-700 text-sm font-bold mb-2">Upload Image</label>
               <input
@@ -56,7 +58,6 @@ export default function Home() {
           "
               />
             </div>
-
             {/* Image Preview */}
             {selectedImage && (
               <div className="mb-4">

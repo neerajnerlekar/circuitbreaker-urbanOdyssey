@@ -1,7 +1,8 @@
 "use client";
 
-import { useForm, FormProvider } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import TextInput from "~~/components/scaffold-eth/Input/TextInput";
+
 export default function Home() {
   const methods = useForm();
   const onSubmit = data => console.log(data);
@@ -17,10 +18,7 @@ export default function Home() {
             {/* Existing TextInput fields */}
             <TextInput name="name" label="Name" type="text" />
             <TextInput name="homeTown" label="HomeTown" type="text" />
-           
-          
-            
-      
+
             <div className="mb-4">
               <span className="block text-gray-700 text-sm font-bold mb-2">Team</span>
               <label className="inline-flex items-center mr-4">
