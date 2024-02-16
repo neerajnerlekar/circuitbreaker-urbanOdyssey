@@ -1,11 +1,11 @@
 "use client";
 
-import TextInput from "../../components/scaffold-eth/Input/TextInput";
-import { FormProvider, useForm } from "react-hook-form";
-
+import { useForm, FormProvider } from "react-hook-form";
+import TextInput from "~~/components/scaffold-eth/Input/TextInput";
 export default function Home() {
   const methods = useForm();
   const onSubmit = data => console.log(data);
+
   return (
     <div className="container mx-auto px-4 py-8">
       <FormProvider {...methods}>
@@ -14,9 +14,25 @@ export default function Home() {
           className="max-w-lg mx-auto bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4"
         >
           <div className="mb-4">
+            {/* Existing TextInput fields */}
             <TextInput name="name" label="Name" type="text" />
             <TextInput name="homeTown" label="HomeTown" type="text" />
-            <TextInput name="team" label="Team" type="text" />
+           
+          
+            
+      
+            <div className="mb-4">
+              <span className="block text-gray-700 text-sm font-bold mb-2">Team</span>
+              <label className="inline-flex items-center mr-4">
+                <input {...methods.register("team")} type="radio" value="Ecoguards" className="form-radio" />
+                <span className="ml-2">Ecoguards</span>
+              </label>
+              <label className="inline-flex items-center">
+                <input {...methods.register("team")} type="radio" value="Technomads" className="form-radio" />
+                <span className="ml-2">Technomads</span>
+              </label>
+            </div>
+
             <TextInput name="country" label="Country" type="text" />
           </div>
           <div className="flex justify-center">
