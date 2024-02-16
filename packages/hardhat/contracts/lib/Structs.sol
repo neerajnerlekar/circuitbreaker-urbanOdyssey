@@ -5,20 +5,18 @@ library Structs {
     struct Player {
         uint256 verifiedPlaces;
         uint256 registeredPlaces;
-        bool isRegistered;
+        bool isVerified;
         string name;
         string hometown;
-        string country;
         Faction faction;
     }
 
     struct Location {
-        address verifiedBy;
+        address registeredBy;
         // decide on this
         // bytes32 Location;
         uint8 level;
         uint256 tokenId;
-        bool isVerified;
         string placeName;
         string placeType;
         string uri;
