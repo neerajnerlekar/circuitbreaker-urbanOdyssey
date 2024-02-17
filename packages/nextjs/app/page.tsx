@@ -20,14 +20,14 @@ const Home: NextPage = () => {
   </h1>
 
   {isConnected ? (
-    <div className="mt-10 p-4  justify-center items-center h-screen">
+    <div className="mt-10 p-4  justify-center items-center">
     
       <button className="px-6 py-3 bg-blue-700 text-white rounded hover:bg-blue-800 transition duration-150 ease-in-out" onSubmit={handleSubmit}>
         Play Game
       </button>
     </div>
   ) : (
-    <div className="mt-10 p-4  justify-center items-center h-screen ">
+    <div className="mt-10 p-4  justify-center items-center  ">
       <p className="text-xl">Please connect the wallet to play the game</p>
     </div>
   )}
