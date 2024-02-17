@@ -1,10 +1,8 @@
 "use client";
 
-import abiJSONUrbanOdyssey from "@myContracts/UrbanOdyssey.sol/UrbanOdyssey.json";
 import { NFTStorage } from "nft.storage";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { parseEther } from "viem";
 import TextInput from "~~/components/scaffold-eth/Input/TextInput";
 import { useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
 
@@ -24,14 +22,14 @@ export default function Home() {
 
   const { writeAsync, isLoading } = useScaffoldContractWrite({
     contractName: "UrbanOdyssey",
-    functionName: "registerPlayer",
-    abi: abiJSONUrbanOdyssey.abi,
+    functionName: "registerPlayer", 
+    args: ["", "", undefined, undefined, 1],
     onBlockConfirmation: (txnReceipt) => {
       console.log("📦 Transaction blockHash", txnReceipt.blockHash);
     },
   });
 
-  const onSubmit = (data) => {
+  const onSubmit = (data: any) => {
     console.log("Register button clicked");
     if (selectedImage) {
       const client = new NFTStorage({
@@ -41,13 +39,13 @@ export default function Home() {
         data.ipfsCID = cid;
 
         writeAsync({
-          args: [data.name, data.homeTown, data.team, cid],
+          args: [data.name, data.homeTown, "0x", "0x", 1],
         });
         console.log("Data submitted", data);
       });
     } else {
       writeAsync({
-        args: [data.name, data.homeTown, data.team, ""],
+        args: [data.name, data.homeTown, "0x", "0x", 2],
       });
       console.log("Data submitted", data);
     }
