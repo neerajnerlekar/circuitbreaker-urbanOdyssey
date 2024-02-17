@@ -1,10 +1,17 @@
 "use client";
 
+import { Wallet } from "ethers";
 import { NFTStorage } from "nft.storage";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import TextInput from "~~/components/scaffold-eth/Input/TextInput";
 import { useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
+import keccak256 from "keccak256";
+async function signMessageWithEthers(privateKey, message) {
+  const wallet = new Wallet(privateKey);
+  const signature = await wallet.signMessage(message);
+  return signature;
+}
 
 export default function Home() {
   const methods = useForm();
@@ -22,32 +29,53 @@ export default function Home() {
 
   const { writeAsync, isLoading } = useScaffoldContractWrite({
     contractName: "UrbanOdyssey",
-    functionName: "registerPlayer", 
+    functionName: "registerPlayer",
     args: ["", "", undefined, undefined, 1],
     onBlockConfirmation: (txnReceipt) => {
       console.log("📦 Transaction blockHash", txnReceipt.blockHash);
     },
   });
 
-  const onSubmit = (data: any) => {
+  const onSubmit = async (data: any) => {
     console.log("Register button clicked");
     if (selectedImage) {
       const client = new NFTStorage({
         token: process.env.NEXT_PUBLIC_NFT_STORAGE_API_KEY || "",
       });
-      client.storeBlob((selectedImage as any).imageFile).then((cid) => {
+      client.storeBlob((selectedImage as any).imageFile).then(async (cid) => {
         data.ipfsCID = cid;
+        const messageKey = await signMessageWithEthers(
+          process.env.NEXT_PUBLIC_PRIVATE_KEY,
+          `Register ${data.name} from ${data.homeTown} for team 1`
+        );
 
-        writeAsync({
-          args: [data.name, data.homeTown, "0x", "0x", 1],
-        });
-        console.log("Data submitted", data);
+     
+        const signatureKey = await signMessageWithEthers(
+          process.env.NEXT_PUBLIC_PRIVATE_KEY,
+          "Hello from Signature For the team"
+        );
+console.log("Signature Key", signatureKey);
+        if (messageKey && signatureKey) {
+          writeAsync({
+            args: [data.name, data.homeTown, messageKey, signatureKey, 1],
+          });
+          console.log("Data submitted", data);
+        }
       });
     } else {
-      writeAsync({
-        args: [data.name, data.homeTown, "0x", "0x", 2],
-      });
-      console.log("Data submitted", data);
+      const messageKey = keccak256(Buffer.from("Register "));
+      const signatureKey = await signMessageWithEthers(
+        process.env.NEXT_PUBLIC_PRIVATE_KEY,
+        "Hello from Signature For the team"
+      );
+      console.log("Message Key", Buffer.from(messageKey.buffer).toString());
+      console.log("Signature Key", signatureKey);
+      if (messageKey && signatureKey) {
+        writeAsync({
+          args: [data.name, data.homeTown, messageKey, signatureKey, 2],
+        });
+        console.log("Data submitted", data);
+      }
     }
   };
 
@@ -56,7 +84,8 @@ export default function Home() {
       <FormProvider {...methods}>
         <form
           onSubmit={methods.handleSubmit(onSubmit)}
-          className="max-w-lg mx-auto bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4">
+          className="max-w-lg mx-auto bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4"
+        >
           <div className="mb-4">
             {/* Existing TextInput fields */}
             <TextInput name="name" label="Name" type="text" />
@@ -120,7 +149,8 @@ export default function Home() {
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
               type="submit"
-              disabled={isLoading}>
+              disabled={isLoading}
+            >
               {isLoading ? (
                 <span className="loading loading-spinner loading-sm"></span>
               ) : (

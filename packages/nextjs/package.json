@@ -21,6 +21,8 @@
     "@uniswap/v2-sdk": "^3.0.1",
     "blo": "^1.0.1",
     "daisyui": "^4.4.19",
+    "ethers": "^6.11.1",
+    "keccak256": "^1.0.6",
     "leaflet": "^1.9.4",
     "next": "^14.0.4",
     "nft.storage": "^7.1.1",
