@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import DynamicMap from "../../../components/Map";
 import TextInput from "../../../components/scaffold-eth/Input/TextInput";
 import { FormProvider, useForm } from "react-hook-form";
 
@@ -8,7 +9,8 @@ export default function Home() {
   const methods = useForm();
 
   const [selectedImage, setSelectedImage] = useState(null);
-  const [location, setLocation] = useState(null);
+  const [location, setLocation] = useState({ coords: { latitude: 0, longitude: 0 }});
+
   const handleImageChange = e => {
     if (e.target.files && e.target.files[0]) {
       const img = e.target.files[0];
@@ -41,8 +43,14 @@ export default function Home() {
           <div className="mb-4">
             <TextInput name="name" label="Name" type="text" />
             <TextInput name="place" label="Type of Place" type="text" />
-            Your Location: Latitude :{location && location.coords.latitude}, Longitude :
-            {location && location.coords.longitude}
+            Your Location: Latitude :{location && location.coords && location.coords.latitude}, Longitude :
+            {location && location.coords && location.coords.longitude}
+            <DynamicMap
+              position={[
+                location && location.coords && location.coords.latitude,
+                location && location.coords && location.coords.longitude,
+              ]}
+            />
             <div className="mb-4">
               <label className="block text-gray-700 text-sm font-bold mb-2">Upload Image</label>
               <input

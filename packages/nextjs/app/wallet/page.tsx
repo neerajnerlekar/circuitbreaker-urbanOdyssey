@@ -1,11 +1,7 @@
 "use client";
 
-
-import Link from "next/link";
-import type { NextPage } from "next";
-import { BugAntIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import DynamicMap from "../../components/Map";
-
+import type { NextPage } from "next";
 
 const Home: NextPage = () => {
   return (
@@ -36,7 +32,6 @@ const Home: NextPage = () => {
         <div className="w-2/3">
           <DynamicMap />
         </div>
-        
       </div>
     </>
   );
