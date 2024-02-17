@@ -1,8 +1,12 @@
 "use client";
 
-import { useEffect } from "react";
+import {
+  RainbowKitProvider,
+  darkTheme,
+  lightTheme,
+} from "@rainbow-me/rainbowkit";
 import { useRouter } from "next/navigation";
-import { RainbowKitProvider, darkTheme, lightTheme } from "@rainbow-me/rainbowkit";
+import { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
 import { WagmiConfig } from "wagmi";
 import { useAccount } from "wagmi";
@@ -18,15 +22,17 @@ import { appChains } from "~~/services/web3/wagmiConnectors";
 
 const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
   const price = useNativeCurrencyPrice();
-  const setNativeCurrencyPrice = useGlobalState(state => state.setNativeCurrencyPrice);
+  const setNativeCurrencyPrice = useGlobalState(
+    (state) => state.setNativeCurrencyPrice
+  );
   const { isConnected } = useAccount();
   const router = useRouter();
   useEffect(() => {
     if (isConnected) {
-      // Redirect to the new page if the wallet is connected
+      // // Redirect to the new page if the wallet is connected
       // router.push("/wallet");
     } else {
-      // Redirect to the new page if the wallet is disconnected
+      // // Redirect to the new page if the wallet is disconnected
       // router.push("/");
     }
   }, [isConnected, router]);
@@ -48,7 +54,11 @@ const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export const ScaffoldEthAppWithProviders = ({ children }: { children: React.ReactNode }) => {
+export const ScaffoldEthAppWithProviders = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   const { isDarkMode } = useDarkMode();
 
   return (
@@ -57,8 +67,7 @@ export const ScaffoldEthAppWithProviders = ({ children }: { children: React.Reac
       <RainbowKitProvider
         chains={appChains.chains}
         avatar={BlockieAvatar}
-        theme={isDarkMode ? darkTheme() : lightTheme()}
-      >
+        theme={isDarkMode ? darkTheme() : lightTheme()}>
         <ScaffoldEthApp>{children}</ScaffoldEthApp>
       </RainbowKitProvider>
     </WagmiConfig>
