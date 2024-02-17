@@ -1,9 +1,12 @@
 "use client";
 
+import abiJSONUrbanOdyssey from "@myContracts/UrbanOdyssey.sol/UrbanOdyssey.json";
 import { NFTStorage } from "nft.storage";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
+import { parseEther } from "viem";
 import TextInput from "~~/components/scaffold-eth/Input/TextInput";
+import { useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
 
 export default function Home() {
   const methods = useForm();
@@ -19,6 +22,15 @@ export default function Home() {
     }
   };
 
+  const { writeAsync, isLoading } = useScaffoldContractWrite({
+    contractName: "UrbanOdyssey",
+    functionName: "registerPlayer",
+    abi: abiJSONUrbanOdyssey.abi,
+    onBlockConfirmation: (txnReceipt) => {
+      console.log("📦 Transaction blockHash", txnReceipt.blockHash);
+    },
+  });
+
   const onSubmit = (data) => {
     console.log("Register button clicked");
     if (selectedImage) {
@@ -26,13 +38,18 @@ export default function Home() {
         token: process.env.NEXT_PUBLIC_NFT_STORAGE_API_KEY || "",
       });
       client.storeBlob((selectedImage as any).imageFile).then((cid) => {
-        // Cast selectedImage as any to avoid type error
-        console.log("Image uploaded successfully", cid);
         data.ipfsCID = cid;
-        console.log("Form data submitted", data);
+
+        writeAsync({
+          args: [data.name, data.homeTown, data.team, cid],
+        });
+        console.log("Data submitted", data);
       });
     } else {
-      console.log("Form data submitted", data);
+      writeAsync({
+        args: [data.name, data.homeTown, data.team, ""],
+      });
+      console.log("Data submitted", data);
     }
   };
 
@@ -55,24 +72,21 @@ export default function Home() {
                 <input
                   {...methods.register("team")}
                   type="radio"
-                  value="Ecoguards"
+                  value="EcoGuardian"
                   className="form-radio"
                 />
-                <span className="ml-2">Ecoguards</span>
+                <span className="ml-2">EcoGuardian</span>
               </label>
               <label className="inline-flex items-center">
                 <input
                   {...methods.register("team")}
                   type="radio"
-                  value="Technomads"
+                  value="TechnoMad"
                   className="form-radio"
                 />
-                <span className="ml-2">Technomads</span>
+                <span className="ml-2">TechnoMad</span>
               </label>
             </div>
-
-            <TextInput name="country" label="Country" type="text" />
-
             <div className="mb-4">
               <label className="block text-gray-700 text-sm font-bold mb-2">
                 Upload Image
@@ -107,8 +121,13 @@ export default function Home() {
           <div className="flex justify-center">
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-              type="submit">
-              Register
+              type="submit"
+              disabled={isLoading}>
+              {isLoading ? (
+                <span className="loading loading-spinner loading-sm"></span>
+              ) : (
+                <>Register</>
+              )}
             </button>
           </div>
         </form>
