@@ -1,11 +1,15 @@
 "use client";
 
-import React, { useCallback, useRef, useState } from "react";
+import { Bars3Icon, BugAntIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Bars3Icon, BugAntIcon } from "@heroicons/react/24/outline";
-import { FaucetButton, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
+import React, { useCallback, useRef, useState } from "react";
+import { useAccount } from "wagmi";
+import {
+  FaucetButton,
+  RainbowKitCustomConnectButton,
+} from "~~/components/scaffold-eth";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
 
 type HeaderMenuLink = {
@@ -14,28 +18,30 @@ type HeaderMenuLink = {
   icon?: React.ReactNode;
 };
 
-export const menuLinks: HeaderMenuLink[] = [
+const baseMenuLinks: HeaderMenuLink[] = [
   {
     label: "Home",
     href: "/",
   },
+];
+
+const connectedMenuLinks: HeaderMenuLink[] = [
+  { label: "Wallet", href: "/wallet" },
   {
-    label:"Wallet",
-    href: "/wallet",
-  },
-  {
-    label:"Registration Form",
+    label: "Registration Form",
     href: "/registration",
   },
   {
-    label:"Location Form",
+    label: "Location Form",
     href: "/registration/location",
-  }
- 
+  },
 ];
 
 export const HeaderMenuLinks = () => {
   const pathname = usePathname();
+  const { isConnected } = useAccount();
+
+  const menuLinks = isConnected ? [...baseMenuLinks, ...connectedMenuLinks] : baseMenuLinks;
 
   return (
     <>
@@ -68,7 +74,7 @@ export const Header = () => {
   const burgerMenuRef = useRef<HTMLDivElement>(null);
   useOutsideClick(
     burgerMenuRef,
-    useCallback(() => setIsDrawerOpen(false), []),
+    useCallback(() => setIsDrawerOpen(false), [])
   );
 
   return (
@@ -77,9 +83,11 @@ export const Header = () => {
         <div className="lg:hidden dropdown" ref={burgerMenuRef}>
           <label
             tabIndex={0}
-            className={`ml-1 btn btn-ghost ${isDrawerOpen ? "hover:bg-secondary" : "hover:bg-transparent"}`}
+            className={`ml-1 btn btn-ghost ${
+              isDrawerOpen ? "hover:bg-secondary" : "hover:bg-transparent"
+            }`}
             onClick={() => {
-              setIsDrawerOpen(prevIsOpenState => !prevIsOpenState);
+              setIsDrawerOpen((prevIsOpenState) => !prevIsOpenState);
             }}
           >
             <Bars3Icon className="h-1/2" />
@@ -96,13 +104,21 @@ export const Header = () => {
             </ul>
           )}
         </div>
-        <Link href="/" passHref className="hidden lg:flex items-center gap-2 ml-4 mr-6 shrink-0">
+        <Link
+          href="/"
+          passHref
+          className="hidden lg:flex items-center gap-2 ml-4 mr-6 shrink-0"
+        >
           <div className="flex relative w-10 h-10">
-            <Image alt="SE2 logo" className="cursor-pointer" fill src="/logo.svg" />
+            <Image
+              alt="SE2 logo"
+              className="cursor-pointer"
+              fill
+              src="/logo.svg"
+            />
           </div>
           <div className="flex flex-col">
             <span className="font-bold leading-tight">Urban Odyssey</span>
-       
           </div>
         </Link>
         <ul className="hidden lg:flex lg:flex-nowrap menu menu-horizontal px-1 gap-2">
