@@ -1,14 +1,14 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.17;
+pragma solidity ^0.8.20;
 
 import "../lib/Structs.sol";
 
 contract OdysseyStorage {
-    uint256 private constant ENERGY = 0;
-    uint256 private constant CHIPS = 1;
-    uint256 private constant locationCounter = 10;
+    address deployer;
 
-    mapping(address => Structs.Player) players;
-    mapping(address => bool) isRegistered;
-    mapping(uint256 locationId => Structs.Location) locations;
+    mapping(uint256 => string) public tokenURIs;
+
+    mapping(address => Structs.Player) public players;
+    mapping(address => bool) public isRegistered;
+    mapping(uint256 locationId => Structs.Location) public locations;
 }

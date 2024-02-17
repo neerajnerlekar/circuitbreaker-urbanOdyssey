@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.17;
+pragma solidity ^0.8.20;
 
 library Structs {
     struct Player {
@@ -16,21 +16,13 @@ library Structs {
         // decide on this
         // bytes32 Location;
         uint8 level;
-        uint256 tokenId;
         string placeName;
         string placeType;
-        string uri;
-        Status status;
+        Faction faction;
     }
 
     enum Faction {
         EcoGuardian,
         TechnoMad
-    }
-
-    enum Status {
-        UnCaptured,
-        EcoGuardian,
-        TenchnoMad
     }
 }
