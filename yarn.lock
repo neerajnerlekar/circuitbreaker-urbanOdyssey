@@ -2655,6 +2655,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/react-dom@npm:^18":
+  version: 18.2.19
+  resolution: "@types/react-dom@npm:18.2.19"
+  dependencies:
+    "@types/react": "*"
+  checksum: 087a19d8e4c1c0900ec4ac5ddb749a811a38274b25683d233c11755d2895cc6e475e8bf9bea3dee36519769298e078d4c2feab9ab4bd13b26bc2a6170716437e
+  languageName: node
+  linkType: hard
+
 "@types/react@npm:*, @types/react@npm:^18.0.9":
   version: 18.2.23
   resolution: "@types/react@npm:18.2.23"
@@ -2663,6 +2672,17 @@ __metadata:
     "@types/scheduler": "*"
     csstype: ^3.0.2
   checksum: efb9d1ed1940c0e7ba08a21ffba5e266d8dbbb8fe618cfb97bc902dfc96385fdd8189e3f7f64b4aa13134f8e61947d60560deb23be151253c3a97b0d070897ca
+  languageName: node
+  linkType: hard
+
+"@types/react@npm:^18":
+  version: 18.2.55
+  resolution: "@types/react@npm:18.2.55"
+  dependencies:
+    "@types/prop-types": "*"
+    "@types/scheduler": "*"
+    csstype: ^3.0.2
+  checksum: a8eb4fa77f73831b9112d4f11a7006217dc0740361649b9b0da3fd441d151a9cd415d5d68b91c0af4e430e063424d301c77489e5edaddc9f711c4e46cf9818a5
   languageName: node
   linkType: hard
 
@@ -11618,7 +11638,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:latest":
+"react-dom@npm:^18.2.0, react-dom@npm:latest":
   version: 18.2.0
   resolution: "react-dom@npm:18.2.0"
   dependencies:
@@ -11723,7 +11743,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:latest":
+"react@npm:^18.2.0, react@npm:latest":
   version: 18.2.0
   resolution: "react@npm:18.2.0"
   dependencies:
@@ -12313,8 +12333,14 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "se-2@workspace:."
   dependencies:
+    "@types/leaflet": ^1
+    "@types/react": ^18
+    "@types/react-dom": ^18
     husky: ^8.0.1
+    leaflet: ^1.9.4
     lint-staged: ^13.0.3
+    react: ^18.2.0
+    react-dom: ^18.2.0
   languageName: unknown
   linkType: soft
 

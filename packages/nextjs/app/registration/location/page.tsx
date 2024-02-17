@@ -1,17 +1,23 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import DynamicMap from "../../../components/Map";
 import TextInput from "../../../components/scaffold-eth/Input/TextInput";
+import dynamic from "next/dynamic";
+import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
+
+const DynamicMap = dynamic(() => import("../../../components/Map"), {
+  loading: () => <p>Loading...</p>,
+});
 
 export default function Home() {
   const methods = useForm();
 
   const [selectedImage, setSelectedImage] = useState(null);
-  const [location, setLocation] = useState({ coords: { latitude: 0, longitude: 0 }});
+  const [location, setLocation] = useState({
+    coords: { latitude: 0, longitude: 0 },
+  });
 
-  const handleImageChange = e => {
+  const handleImageChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       const img = e.target.files[0];
       setSelectedImage({
@@ -21,14 +27,14 @@ export default function Home() {
     }
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     // Form submission logic here
     console.log("Form data submitted", e);
     // Remember to handle the image upload process here
   };
 
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition(e => {
+    navigator.geolocation.getCurrentPosition((e) => {
       console.log(e);
       setLocation(e);
     });
@@ -38,21 +44,24 @@ export default function Home() {
       <FormProvider {...methods}>
         <form
           onSubmit={methods.handleSubmit(handleSubmit)}
-          className="max-w-lg mx-auto bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4"
-        >
+          className="max-w-lg mx-auto bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4">
           <div className="mb-4">
             <TextInput name="name" label="Name" type="text" />
             <TextInput name="place" label="Type of Place" type="text" />
-            Your Location: Latitude :{location && location.coords && location.coords.latitude}, Longitude :
-            {location && location.coords && location.coords.longitude}
-            <DynamicMap
-              position={[
-                location && location.coords && location.coords.latitude,
-                location && location.coords && location.coords.longitude,
-              ]}
-            />
+            Your Location: Latitude :{location?.coords?.latitude}, Longitude :
+            {location?.coords?.longitude}
+            {location?.coords?.latitude !== 0 && (
+              <DynamicMap
+                position={[
+                  location?.coords?.latitude,
+                  location?.coords?.longitude,
+                ]}
+              />
+            )}
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">Upload Image</label>
+              <label className="block text-gray-700 text-sm font-bold mb-2">
+                Upload Image
+              </label>
               <input
                 type="file"
                 accept="image/*"
@@ -69,16 +78,21 @@ export default function Home() {
             {/* Image Preview */}
             {selectedImage && (
               <div className="mb-4">
-                <p className="block text-gray-700 text-sm font-bold mb-2">Preview</p>
-                <img src={selectedImage.previewURL} alt="Preview" className="max-w-xs max-h-64" />
+                <p className="block text-gray-700 text-sm font-bold mb-2">
+                  Preview
+                </p>
+                <img
+                  src={selectedImage.previewURL}
+                  alt="Preview"
+                  className="max-w-xs max-h-64"
+                />
               </div>
             )}
           </div>
           <div className="flex justify-center">
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-              type="submit"
-            >
+              type="submit">
               Generate Proof
             </button>
           </div>
