@@ -1,12 +1,16 @@
 "use client";
 
-import DynamicMap from "../../components/Map";
 import type { NextPage } from "next";
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 import NestedLayoutForWallet from "~~/components/NestedLayoutForWallet";
 import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
+
+const DynamicMap = dynamic(() => import("~~/components/Map"), {
+  ssr: false,
+});
 
 const Home: NextPage = () => {
   const { address, isConnected } = useAccount();
@@ -15,8 +19,6 @@ const Home: NextPage = () => {
     functionName: "players",
     args: [address],
   });
-
-
 
   return (
     <NestedLayoutForWallet>
