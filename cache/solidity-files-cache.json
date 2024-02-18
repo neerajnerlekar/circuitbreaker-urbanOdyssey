@@ -7,7 +7,7 @@
     "tests": "test",
     "scripts": "script",
     "libraries": [
-      "lib"
+      "node_modules"
     ]
   },
   "files": {}
