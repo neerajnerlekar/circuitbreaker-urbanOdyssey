@@ -20,7 +20,7 @@ export default function Home() {
     imageFile: File | null;
     previewURL: string | null;
   } | null>(null);
-  
+
   const [location, setLocation] = useState({
     coords: { latitude: 0, longitude: 0 },
   });
@@ -49,8 +49,10 @@ export default function Home() {
     let ipfsCID = ""; // IPFS Content Identifier
 
     const handleSubmission = () => {
+      console.log("handling write");
       console.log("Form data submitted", formData);
       console.log("IPFS CID", ipfsCID);
+
       writeAsync({
         args: [formData.name, formData.place, ipfsCID],
       });
@@ -64,6 +66,7 @@ export default function Home() {
         .storeBlob((selectedImage as any).imageFile)
         .then((cid) => {
           ipfsCID = cid;
+          console.log("IPFS CID", ipfsCID);
           handleSubmission();
         })
         .catch((error) => {
@@ -87,8 +90,7 @@ export default function Home() {
         <FormProvider {...methods}>
           <form
             onSubmit={methods.handleSubmit(onSubmit)}
-            className="max-w-lg mx-auto bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4"
-          >
+            className="max-w-lg mx-auto bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4">
             <div className="mb-4">
               <TextInput name="name" label="Name" type="text" />
               <TextInput name="place" label="Type of Place" type="text" />
@@ -128,6 +130,8 @@ export default function Home() {
                     src={selectedImage.previewURL}
                     alt="Preview"
                     className="max-w-xs max-h-64"
+                    width={200}
+                    height={200}
                   />
                 </div>
               )}
@@ -136,8 +140,7 @@ export default function Home() {
               <button
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
                 type="submit"
-                disabled={isLoading}
-              >
+                disabled={isLoading}>
                 {isLoading ? (
                   <span className="loading loading-spinner loading-sm"></span>
                 ) : (

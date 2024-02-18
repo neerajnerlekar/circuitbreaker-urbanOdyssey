@@ -5614,9 +5614,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"circuits@workspace:packages/circuits":
+"circuits@workspace:packages/circuits_Twitter":
   version: 0.0.0-use.local
-  resolution: "circuits@workspace:packages/circuits"
+  resolution: "circuits@workspace:packages/circuits_Twitter"
   dependencies:
     "@zk-email/circuits": ^3.2.3
     "@zk-email/contracts": ^5.0.2
