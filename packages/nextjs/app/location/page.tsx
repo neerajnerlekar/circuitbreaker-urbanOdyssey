@@ -50,10 +50,10 @@ export default function Home() {
   const onSubmit = (formData: any) => {
     const handleSubmission = ({
       ipfsCID,
-      ipfsCIDmust = false,
+      ipfsCIDmust,
     }: {
       ipfsCID: string;
-      ipfsCIDmust?: boolean;
+      ipfsCIDmust: boolean;
     }) => {
       console.log("handling write");
       console.log("Form data submitted", formData);
@@ -103,13 +103,19 @@ export default function Home() {
         .storeBlob((selectedImage as any).imageFile)
         .then((cid) => {
           console.log("IPFS CID", cid);
-          handleSubmission(cid, true);
+          handleSubmission({
+            ipfsCID: cid,
+            ipfsCIDmust: true,
+          });
         })
         .catch((error) => {
           console.error("Error storing blob:", error);
         });
     } else {
-      handleSubmission("", false);
+      handleSubmission({
+        ipfsCID: "",
+        ipfsCIDmust: false,
+      });
     }
   };
 
@@ -126,7 +132,8 @@ export default function Home() {
         <FormProvider {...methods}>
           <form
             onSubmit={methods.handleSubmit(onSubmit)}
-            className="max-w-lg mx-auto bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4">
+            className="max-w-lg mx-auto bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4"
+          >
             <div className="mb-4">
               <TextInput name="name" label="Name" type="text" />
               <TextInput name="place" label="Type of Place" type="text" />
@@ -176,7 +183,8 @@ export default function Home() {
               <button
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
                 type="submit"
-                disabled={isLoading}>
+                disabled={isLoading}
+              >
                 {isLoading ? (
                   <span className="loading loading-spinner loading-sm"></span>
                 ) : (
