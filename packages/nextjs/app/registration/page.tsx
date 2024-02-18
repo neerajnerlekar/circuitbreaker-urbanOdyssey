@@ -12,7 +12,7 @@ import { useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
 export default function Home() {
   const methods = useForm({
     defaultValues: {
-      team: "0", 
+      team: "0",
     },
   });
   const router = useRouter();
@@ -150,17 +150,19 @@ export default function Home() {
                 </div>
 
                 <div className="flex items-center justify-between">
-                  <button
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                    onClick={handleSubmission}
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting ? (
-                      <span className="loading loading-spinner loading-sm"></span>
-                    ) : (
-                      <>Submit</>
-                    )}
-                  </button>
+                  {text.length > 0 && (
+                    <button
+                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                      onClick={handleSubmission}
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? (
+                        <span className="loading loading-spinner loading-sm"></span>
+                      ) : (
+                        <>Submit</>
+                      )}
+                    </button>
+                  )}
                 </div>
 
                 {isSubmitting && (
