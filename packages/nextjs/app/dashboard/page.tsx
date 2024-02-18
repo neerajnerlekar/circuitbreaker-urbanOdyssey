@@ -40,22 +40,29 @@ const Page = () => {
   const faction = myData?.[5];
   faction == 0 ? chipsBalance : energyBalance;
 
-  const [myPlaces, setMyPlaces] = React.useState<Place[] | null>(null);
   const { data: myPlacesData } = useScaffoldContractRead({
     contractName: "UrbanOdyssey",
     functionName: "getAllLocations",
   });
   const handleMyPlaces = () => {
-    setMyPlaces(myPlacesData as Place[]);
+    const placesRegisterByUser = myPlacesData?.filter(
+      (place: Place) => place.registeredBy == address
+    );
+    setPlaces(placesRegisterByUser as unknown as Place[]);
   };
+  const [places, setPlaces] = React.useState<Place[] | null>(null);
 
-  const [allPlaces, setAllPlaces] = React.useState<Place[] | null>(null);
   const { data: allPlacesData } = useScaffoldContractRead({
     contractName: "UrbanOdyssey",
     functionName: "getAllLocations",
   });
+ 
   const handleAllPlaces = () => {
-    setAllPlaces(allPlacesData as Place[]);
+    const allPlaces = allPlacesData?.filter(
+      (place: Place) =>
+        place.registeredBy != "0x0000000000000000000000000000000000000000"
+    );
+    setPlaces(allPlaces as unknown as Place[]);
   };
 
   const router = useRouter();
@@ -107,7 +114,7 @@ const Page = () => {
           </div>
 
           <div className="flex flex-row ">
-            {allPlaces?.map((place, index) => {
+            {places?.map((place, index) => {
               const baseIfpsUrl = "https://ipfs.io/ipfs/";
               const { registeredBy, level, placeName, placeType, faction } =
                 place;
