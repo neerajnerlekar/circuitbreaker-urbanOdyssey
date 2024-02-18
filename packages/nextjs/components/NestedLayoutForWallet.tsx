@@ -1,19 +1,21 @@
 import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import React, { ReactElement, use } from "react";
 import { useEffect } from "react";
 import { useAccount } from "wagmi";
 import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
 
 const NestedLayoutForWallet = ({ children }: { children: ReactElement }) => {
-  const { isConnected, address } = useAccount();
   const router = useRouter();
-
+  const pathname = usePathname();
 
   useEffect(() => {
- 
-    if (!isConnected) {
-      router.push("/");
-    } 
+    if (
+      localStorage.getItem("isRegistered") == "true" &&
+      pathname == "/registration"
+    ) {
+      router.push("/dashboard");
+    }
   }, []);
 
   return <div>{children}</div>;

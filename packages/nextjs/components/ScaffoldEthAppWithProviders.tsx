@@ -43,7 +43,7 @@ const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
     } else {
       localStorage.clear();
       // // Redirect to the new page if the wallet is disconnected
-       router.push("/");
+      router.push("/");
     }
   }, [isConnected, router]);
   useEffect(() => {
