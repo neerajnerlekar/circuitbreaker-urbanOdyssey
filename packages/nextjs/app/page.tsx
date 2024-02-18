@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { useAccount } from "wagmi";
 import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
 
+
 const Home: NextPage = () => {
   const { isConnected, address } = useAccount();
   const router = useRouter();

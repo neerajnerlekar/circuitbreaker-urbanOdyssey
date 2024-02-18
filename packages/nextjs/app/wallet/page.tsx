@@ -4,7 +4,7 @@ import DynamicMap from "../../components/Map";
 import type { NextPage } from "next";
 import { useAccount } from "wagmi";
 import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
-
+import NestedLayoutForWallet from "~~/components/NestedLayoutForWallet";
 const Home: NextPage = () => {
   const { address, isConnected } = useAccount();
   const { data: myData } = useScaffoldContractRead({
@@ -13,7 +13,7 @@ const Home: NextPage = () => {
     args: [address],
   });
   return (
-    <>
+    <NestedLayoutForWallet>
       <div className="flex items-center flex-col flex-grow pt-10">
         {isConnected && (
           <h1 className="text-2xl font-bold">
@@ -27,7 +27,7 @@ const Home: NextPage = () => {
           <DynamicMap />
         </div>
       </div>
-    </>
+    </NestedLayoutForWallet>
   );
 };
 

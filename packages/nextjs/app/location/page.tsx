@@ -7,6 +7,7 @@ import { NFTStorage } from "nft.storage";
 import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
+import NestedLayoutForWallet from "~~/components/NestedLayoutForWallet";
 
 const DynamicMap = dynamic(() => import("../../components/Map"), {
   loading: () => <p>Loading...</p>,
@@ -79,6 +80,7 @@ export default function Home() {
     });
   }, []);
   return (
+    <NestedLayoutForWallet>
     <div className="container mx-auto px-4 py-8">
       <FormProvider {...methods}>
         <form
@@ -142,5 +144,6 @@ export default function Home() {
         </form>
       </FormProvider>
     </div>
+    </NestedLayoutForWallet>
   );
 }

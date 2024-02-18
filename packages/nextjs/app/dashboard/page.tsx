@@ -2,6 +2,7 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
+import NestedLayoutForWallet from "~~/components/NestedLayoutForWallet";
 
 const Page = () => {
   const router = useRouter();
@@ -11,6 +12,7 @@ const Page = () => {
     
   };
   return (
+    <NestedLayoutForWallet>
     <div className="flex h-screen text-black">
       <div className="w-64 flex flex-col p-4">
         <button
@@ -42,6 +44,7 @@ const Page = () => {
         </div>
       </div>
     </div>
+    </NestedLayoutForWallet>
   );
 };
 
