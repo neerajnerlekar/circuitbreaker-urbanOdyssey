@@ -15,6 +15,7 @@ import { Header } from "~~/components/Header";
 import { BlockieAvatar } from "~~/components/scaffold-eth";
 import { ProgressBar } from "~~/components/scaffold-eth/ProgressBar";
 import { useNativeCurrencyPrice } from "~~/hooks/scaffold-eth";
+import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
 import { useDarkMode } from "~~/hooks/scaffold-eth/useDarkMode";
 import { useGlobalState } from "~~/services/store/store";
 import { wagmiConfig } from "~~/services/web3/wagmiConfig";
@@ -25,16 +26,26 @@ const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
   const setNativeCurrencyPrice = useGlobalState(
     (state) => state.setNativeCurrencyPrice
   );
-  const { isConnected } = useAccount();
+  const { isConnected, address } = useAccount();
   const router = useRouter();
+
+  const { data: myData } = useScaffoldContractRead({
+    contractName: "UrbanOdyssey",
+    functionName: "isRegistered",
+    args: [address],
+  });
+
   useEffect(() => {
     if (isConnected) {
-      // // Redirect to the new page if the wallet is connected
-      // router.push("/wallet");
+      if (myData) {
+        localStorage.setItem("isRegistered", "true");
+      }
     } else {
+      localStorage.clear();
       // // Redirect to the new page if the wallet is disconnected
-      // router.push("/");
+      router.push("/");
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isConnected, router]);
   useEffect(() => {
     if (price > 0) {
@@ -67,7 +78,8 @@ export const ScaffoldEthAppWithProviders = ({
       <RainbowKitProvider
         chains={appChains.chains}
         avatar={BlockieAvatar}
-        theme={isDarkMode ? darkTheme() : lightTheme()}>
+        theme={isDarkMode ? darkTheme() : lightTheme()}
+      >
         <ScaffoldEthApp>{children}</ScaffoldEthApp>
       </RainbowKitProvider>
     </WagmiConfig>

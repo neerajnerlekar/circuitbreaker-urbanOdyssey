@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { FormProvider, useForm } from "react-hook-form";
 import TextInput from "~~/components/scaffold-eth/Input/TextInput";
 import { useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
+import NestedLayoutForWallet from "~~/components/NestedLayoutForWallet";
 
 export default function Home() {
   const methods = useForm();
@@ -45,6 +46,7 @@ export default function Home() {
   };
 
   return (
+    <NestedLayoutForWallet>
     <div className="container mx-auto px-4 py-8">
       <FormProvider {...methods}>
         <form
@@ -94,6 +96,7 @@ export default function Home() {
         </form>
       </FormProvider>
     </div>
+    </NestedLayoutForWallet>
   );
 }
 
