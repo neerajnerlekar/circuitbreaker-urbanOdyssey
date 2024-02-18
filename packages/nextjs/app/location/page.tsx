@@ -38,7 +38,7 @@ export default function Home() {
   const { writeAsync, isLoading } = useScaffoldContractWrite({
     contractName: "UrbanOdyssey",
     functionName: "registerAndVerifyPlace",
-    args: ["", "", ""],
+    args: ["", "", "", 0, 0],
     value: BigInt(0),
     onBlockConfirmation: (txnReceipt) => {
       console.log("📦 Transaction blockHash", txnReceipt.blockHash);
@@ -52,9 +52,14 @@ export default function Home() {
       console.log("handling write");
       console.log("Form data submitted", formData);
       console.log("IPFS CID", ipfsCID);
-
+      const latitude = location.coords.latitude;
+      const longitude = location.coords.longitude;
+      console.log("Latitude", latitude, "Longitude", longitude);
+      const _lat: number | undefined = Number(latitude.toFixed(7)) * 10000000;
+      const _long: number | undefined = Number(longitude.toFixed(7)) * 10000000;
+      console.log("_lat", _lat, "_long", _long);
       writeAsync({
-        args: [formData.name, formData.place, ipfsCID],
+        args: [formData.name, formData.place, ipfsCID, _lat, _long],
       });
     };
 
