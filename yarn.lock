@@ -2046,7 +2046,7 @@ __metadata:
     eslint-config-next: ^14.0.4
     eslint-config-prettier: ^8.5.0
     eslint-plugin-prettier: ^4.2.1
-    ethers: ^6.11.1
+    ethers: latest
     keccak256: ^1.0.6
     leaflet: ^1.9.4
     next: ^14.0.4
@@ -7402,7 +7402,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ethers@npm:^6.11.1":
+"ethers@npm:latest":
   version: 6.11.1
   resolution: "ethers@npm:6.11.1"
   dependencies:
