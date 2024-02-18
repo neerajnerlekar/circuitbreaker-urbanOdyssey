@@ -15,6 +15,7 @@ type Place = {
   placeName: string;
   placeType: string;
   faction: number;
+  ipfsURI: string;
 };
 
 const Page = () => {
@@ -56,7 +57,7 @@ const Page = () => {
     contractName: "UrbanOdyssey",
     functionName: "getAllLocations",
   });
- 
+
   const handleAllPlaces = () => {
     const allPlaces = allPlacesData?.filter(
       (place: Place) =>
@@ -118,6 +119,8 @@ const Page = () => {
               const baseIfpsUrl = "https://ipfs.io/ipfs/";
               const { registeredBy, level, placeName, placeType, faction } =
                 place;
+
+              console.log(place);
               return (
                 <div
                   className="card w-64 bg-base-100 shadow-xl mb-6 m-10"
@@ -125,7 +128,13 @@ const Page = () => {
                 >
                   <figure>
                     <Image
-                      src={`${baseIfpsUrl}bafkreietcrmhbmbutgglkg4g2mg2dep5b4d3ngdkbte4n3s53rzrxwihti`}
+                      src={
+                        place?.ipfsURI != ""
+                          ? `${baseIfpsUrl}bafkreietcrmhbmbutgglkg4g2mg2dep5b4d3ngdkbte4n3s53rzrxwihti`
+                          : place.faction == 1
+                          ? "/technoMadLogo.jpg"
+                          : "/ecoGuardianLogo.jpg"
+                      }
                       alt={placeName}
                       width={500}
                       height={150}
