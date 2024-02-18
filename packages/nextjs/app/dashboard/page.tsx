@@ -38,10 +38,11 @@ const Page = () => {
   return (
     <NestedLayoutForWallet>
       <div className="flex h-screen text-black">
-        <div className="w-64 flex flex-col p-4">
+        <div className="w-64 flex flex-col p-4 ">
           <button
             className="flex items-center justify-center h-12 w-full bg-blue-500 mb-4"
-            onClick={handleNewPlaceSubmit}>
+            onClick={handleNewPlaceSubmit}
+          >
             New Place
           </button>
           <button className="flex items-center justify-center h-12 w-full bg-blue-500 mb-4">
@@ -56,16 +57,19 @@ const Page = () => {
           <div className="flex justify-around p-4">
             <div className="flex flex-col items-center">
               <span className="icon lightning-bolt"></span>
-              <span className="text-black text-3xl">My Solarpunk places</span>
+              <span className="text-black text-3xl">EcoGuardian</span>
               <p className="mt-8 text-1xl font-bold">
-                {faction == 1
-                  ? `Your CHIPS Balance is:${chipsBalance?.toString()} `
-                  : `Your ENERGY Balance is: ${energyBalance?.toString()}`}
+                {faction == 0 &&
+                  `Your ENERGY Balance is: ${energyBalance?.toString()}`}
               </p>
             </div>
-            <div className="flex items-start space-x-2">
+            <div className="flex items-center flex-col justify-start">
               <span className="icon lightning-bolt"></span>
-              <span className="text-black text-3xl">My Cyberpunk places</span>
+              <span className="text-black text-3xl">TechnoMad</span>
+              <p className="mt-39 text-1xl font-bold">
+                {faction == 1 &&
+                  `Your CHIPS Balance is:${chipsBalance?.toString()} `}
+              </p>
             </div>
           </div>
         </div>
