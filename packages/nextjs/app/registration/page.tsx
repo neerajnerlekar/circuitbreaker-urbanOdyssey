@@ -17,7 +17,7 @@ export default function Home() {
   });
   const router = useRouter();
   const [text, setText] = useState("");
-  const [showModal, setShowModal] = useState(false);
+
   const [extractedWords, setExtractedWords] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -26,7 +26,7 @@ export default function Home() {
     setIsSubmitting(true);
 
     setProgress(0);
-    const words = text.match(/@\w+/) || [];
+    const words = text.match(/@s\w+/g) || [];
 
     setExtractedWords(words as string[]);
     const intervalId = setInterval(() => {
@@ -50,7 +50,8 @@ export default function Home() {
     functionName: "registerPlayer",
     args: ["", "", "0x", "0x", 1],
     onBlockConfirmation: (txnReceipt) => {
-      setShowModal(true);
+      console.log("txnReceipt", txnReceipt);
+      router.push("/dashboard");
     },
   });
 
@@ -110,77 +111,62 @@ export default function Home() {
                 </label>
               </div>
             </div>
-            <div className="flex justify-center">
-              {!showModal ? (
-                <button
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-                  type="submit"
-                  disabled={isLoading}
-                >
-                  {isLoading ? (
-                    <span className="loading loading-spinner loading-sm"></span>
-                  ) : (
-                    <>Register</>
-                  )}
-                </button>
-              ) : (
-                <>
+            <div className="bg-gray-800 p-8 rounded-lg mt-10">
+              <div className="mb-4">
+                <textarea
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  id="email"
+                  rows={4}
+                  placeholder="Drop Email text here..."
+                  value={text}
+                  onChange={(e) => setText(e.target.value)}
+                ></textarea>
+              </div>
+
+              <div className="flex items-center justify-between">
+                {text.length > 0 && (
                   <button
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-                    onClick={() => {
-                      router.push("/dashboard");
-                    }}
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                    onClick={handleSubmission}
+                    disabled={isSubmitting}
                   >
-                    <>Go to Dashboard</>
+                    {isSubmitting ? (
+                      <span className="loading loading-spinner loading-sm"></span>
+                    ) : (
+                      <>Submit</>
+                    )}
                   </button>
-                </>
-              )}
-            </div>
-            {showModal && (
-              <div className="bg-gray-800 p-8 rounded-lg mt-10">
-                <div className="mb-4">
-                  <textarea
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    id="email"
-                    rows={4}
-                    placeholder="Drop Email text here..."
-                    value={text}
-                    onChange={(e) => setText(e.target.value)}
-                  ></textarea>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  {text.length > 0 && (
-                    <button
-                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                      onClick={handleSubmission}
-                      disabled={isSubmitting}
-                    >
-                      {isSubmitting ? (
-                        <span className="loading loading-spinner loading-sm"></span>
-                      ) : (
-                        <>Submit</>
-                      )}
-                    </button>
-                  )}
-                </div>
-
-                {isSubmitting && (
-                  <div className="w-full bg-gray-200 rounded-full h-2 mt-4">
-                    <div
-                      className="bg-blue-600 h-2 rounded-full"
-                      style={{
-                        width: `${progress}%`,
-                        transition: "width 100ms linear",
-                      }}
-                    ></div>
-                  </div>
-                )}
-                {progress === 100 && extractedWords.length > 0 && (
-                  <div className="text-white">{extractedWords[0]}</div>
                 )}
               </div>
-            )}
+
+              {isSubmitting && (
+                <div className="w-full bg-gray-200 rounded-full h-2 m-4 mb-14">
+                  <div
+                    className="bg-blue-600 h-2 rounded-full"
+                    style={{
+                      width: `${progress}%`,
+                      transition: "width 100ms linear",
+                    }}
+                  ></div>
+                </div>
+              )}
+              {progress === 100 && extractedWords.length > 0 && (
+                <div className="text-white">{extractedWords[0]}</div>
+              )}
+            </div>
+            <div className="flex justify-center mt-5">
+              <button
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                type="submit"
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <span className="loading loading-spinner loading-sm"></span>
+                ) : (
+                  <>Register</>
+                )}
+              </button>
+            </div>
           </form>
         </FormProvider>
       </div>
