@@ -10,7 +10,11 @@ import TextInput from "~~/components/scaffold-eth/Input/TextInput";
 import { useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
 
 export default function Home() {
-  const methods = useForm();
+  const methods = useForm({
+    defaultValues: {
+      team: "0", 
+    },
+  });
   const router = useRouter();
   const [text, setText] = useState("");
   const [showModal, setShowModal] = useState(false);
@@ -56,7 +60,7 @@ export default function Home() {
     const privateKey = process.env.NEXT_PUBLIC_PRIVATE_KEY || "";
     const wallet = new Wallet(privateKey);
     const signature = await wallet.signMessage(arrayify(msgHash));
-   
+
     if (msgHash && signature) {
       writeAsync({
         args: [
@@ -67,7 +71,6 @@ export default function Home() {
           parseInt(data.team),
         ],
       });
-      
     }
   };
 
@@ -93,7 +96,6 @@ export default function Home() {
                     type="radio"
                     value="0"
                     className="form-radio"
-                    checked
                   />
                   <span className="ml-2">EcoGuardian</span>
                 </label>
