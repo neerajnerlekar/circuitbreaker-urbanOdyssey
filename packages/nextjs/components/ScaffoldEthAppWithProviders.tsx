@@ -6,6 +6,7 @@ import {
   lightTheme,
 } from "@rainbow-me/rainbowkit";
 import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
 import { WagmiConfig } from "wagmi";
@@ -28,7 +29,7 @@ const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
   );
   const { isConnected, address } = useAccount();
   const router = useRouter();
-
+  const pathName = usePathname();
   const { data: myData } = useScaffoldContractRead({
     contractName: "UrbanOdyssey",
     functionName: "isRegistered",
@@ -36,7 +37,9 @@ const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
   });
 
   useEffect(() => {
-    if (isConnected) {
+    if (pathName == "/debug") {
+      router.push("/debug");
+    } else if (isConnected) {
       if (myData) {
         localStorage.setItem("isRegistered", "true");
       }
@@ -45,7 +48,7 @@ const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
       // // Redirect to the new page if the wallet is disconnected
       router.push("/");
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isConnected, router]);
   useEffect(() => {
     if (price > 0) {
@@ -78,8 +81,7 @@ export const ScaffoldEthAppWithProviders = ({
       <RainbowKitProvider
         chains={appChains.chains}
         avatar={BlockieAvatar}
-        theme={isDarkMode ? darkTheme() : lightTheme()}
-      >
+        theme={isDarkMode ? darkTheme() : lightTheme()}>
         <ScaffoldEthApp>{children}</ScaffoldEthApp>
       </RainbowKitProvider>
     </WagmiConfig>

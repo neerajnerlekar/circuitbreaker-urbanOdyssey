@@ -13,12 +13,23 @@ const DynamicMap = dynamic(() => import("~~/components/Map"), {
 });
 
 const Home: NextPage = () => {
+  const [location, setLocation] = useState({
+    coords: { latitude: 0, longitude: 0 },
+  });
+
   const { address, isConnected } = useAccount();
   const { data: playerData } = useScaffoldContractRead({
     contractName: "UrbanOdyssey",
     functionName: "players",
     args: [address],
   });
+
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition((e) => {
+      console.log(e);
+      setLocation(e);
+    });
+  }, []);
 
   return (
     <NestedLayoutForWallet>
@@ -86,7 +97,14 @@ const Home: NextPage = () => {
         )}
 
         <div className="w-2/3 mt-6">
-          <DynamicMap />
+          {location?.coords?.latitude !== 0 && (
+            <DynamicMap
+              position={[
+                location?.coords?.latitude,
+                location?.coords?.longitude,
+              ]}
+            />
+          )}
         </div>
       </div>
     </NestedLayoutForWallet>

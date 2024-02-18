@@ -9,7 +9,7 @@ const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL
 const imageUrl = `${baseUrl}/thumbnail.jpg`;
 
 export const metadata: Metadata = {
-  // metadataBase: new URL(baseUrl),
+  metadataBase: new URL("http://localhost"),
   title: {
     default: "Scaffold-ETH 2 App",
     template: "%s | Scaffold-ETH 2",
