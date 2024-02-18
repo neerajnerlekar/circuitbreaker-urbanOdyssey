@@ -27,20 +27,20 @@ const baseMenuLinks: HeaderMenuLink[] = [
 ];
 
 const connectedMenuLinks: HeaderMenuLink[] = [
-  { label: "Wallet", href: "/wallet" },
+  { label: "My profile", href: "/profile" },
   {
-    label: "Registration Form",
+    label: "Registration",
     href: "/registration",
   },
   {
-    label: "Location Form",
+    label: "Add place",
     href: "/location",
   },
 ];
 
 export const HeaderMenuLinks = () => {
   const pathname = usePathname();
-  const { isConnected,address } = useAccount();
+  const { isConnected, address } = useAccount();
   const { data: myData } = useScaffoldContractRead({
     contractName: "UrbanOdyssey",
     functionName: "isRegistered",
