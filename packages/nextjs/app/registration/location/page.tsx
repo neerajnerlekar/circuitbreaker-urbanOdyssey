@@ -2,8 +2,11 @@
 
 import TextInput from "../../../components/scaffold-eth/Input/TextInput";
 import dynamic from "next/dynamic";
+import Image from "next/image";
+import { NFTStorage } from "nft.storage";
 import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
+import { useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
 
 const DynamicMap = dynamic(() => import("../../../components/Map"), {
   loading: () => <p>Loading...</p>,
@@ -12,12 +15,15 @@ const DynamicMap = dynamic(() => import("../../../components/Map"), {
 export default function Home() {
   const methods = useForm();
 
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImage, setSelectedImage] = useState<{
+    imageFile: File | null;
+    previewURL: string | null;
+  } | null>(null);
   const [location, setLocation] = useState({
     coords: { latitude: 0, longitude: 0 },
   });
 
-  const handleImageChange = (e) => {
+  const handleImageChange = (e: any) => {
     if (e.target.files && e.target.files[0]) {
       const img = e.target.files[0];
       setSelectedImage({
@@ -27,10 +33,43 @@ export default function Home() {
     }
   };
 
-  const handleSubmit = (e) => {
-    // Form submission logic here
-    console.log("Form data submitted", e);
-    // Remember to handle the image upload process here
+  const { writeAsync, isLoading } = useScaffoldContractWrite({
+    contractName: "UrbanOdyssey",
+    functionName: "registerAndVerifyPlace",
+    args: ["", "", ""],
+    value: BigInt(0),
+    onBlockConfirmation: (txnReceipt) => {
+      console.log("📦 Transaction blockHash", txnReceipt.blockHash);
+    },
+  });
+
+  const onSubmit = (formData: any) => {
+    let ipfsCID = ""; // IPFS Content Identifier
+
+    const handleSubmission = () => {
+      console.log("Form data submitted", formData);
+      console.log("IPFS CID", ipfsCID);
+      writeAsync({
+        args: [formData.name, formData.place, ipfsCID],
+      });
+    };
+
+    if (selectedImage && selectedImage.imageFile) {
+      const client = new NFTStorage({
+        token: process.env.NEXT_PUBLIC_NFT_STORAGE_API_KEY || "",
+      });
+      client
+        .storeBlob((selectedImage as any).imageFile)
+        .then((cid) => {
+          ipfsCID = cid;
+          handleSubmission();
+        })
+        .catch((error) => {
+          console.error("Error storing blob:", error);
+        });
+    } else {
+      handleSubmission();
+    }
   };
 
   useEffect(() => {
@@ -43,13 +82,11 @@ export default function Home() {
     <div className="container mx-auto px-4 py-8">
       <FormProvider {...methods}>
         <form
-          onSubmit={methods.handleSubmit(handleSubmit)}
+          onSubmit={methods.handleSubmit(onSubmit)}
           className="max-w-lg mx-auto bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4">
           <div className="mb-4">
             <TextInput name="name" label="Name" type="text" />
             <TextInput name="place" label="Type of Place" type="text" />
-            Your Location: Latitude :{location?.coords?.latitude}, Longitude :
-            {location?.coords?.longitude}
             {location?.coords?.latitude !== 0 && (
               <DynamicMap
                 position={[
@@ -58,9 +95,10 @@ export default function Home() {
                 ]}
               />
             )}
+            <br />
             <div className="mb-4">
               <label className="block text-gray-700 text-sm font-bold mb-2">
-                Upload Image
+                PlaceImage
               </label>
               <input
                 type="file"
@@ -76,12 +114,12 @@ export default function Home() {
               />
             </div>
             {/* Image Preview */}
-            {selectedImage && (
+            {selectedImage && selectedImage.previewURL && (
               <div className="mb-4">
                 <p className="block text-gray-700 text-sm font-bold mb-2">
                   Preview
                 </p>
-                <img
+                <Image
                   src={selectedImage.previewURL}
                   alt="Preview"
                   className="max-w-xs max-h-64"
@@ -92,8 +130,13 @@ export default function Home() {
           <div className="flex justify-center">
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-              type="submit">
-              Generate Proof
+              type="submit"
+              disabled={isLoading}>
+              {isLoading ? (
+                <span className="loading loading-spinner loading-sm"></span>
+              ) : (
+                <>Generate Proof</>
+              )}
             </button>
           </div>
         </form>
