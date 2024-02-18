@@ -1,19 +1,20 @@
 "use client";
 
 import { Wallet, hashMessage } from "ethers";
+import { useRouter } from "next/navigation";
 import { FormProvider, useForm } from "react-hook-form";
 import TextInput from "~~/components/scaffold-eth/Input/TextInput";
 import { useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
 
 export default function Home() {
   const methods = useForm();
-
+  const router = useRouter();
   const { writeAsync, isLoading } = useScaffoldContractWrite({
     contractName: "UrbanOdyssey",
     functionName: "registerPlayer",
     args: ["", "", "0x", "0x", 1],
     onBlockConfirmation: (txnReceipt) => {
-      console.log("📦 Transaction blockHash", txnReceipt.blockHash);
+      router.push("/dashboard");
     },
   });
 
@@ -49,7 +50,8 @@ export default function Home() {
       <FormProvider {...methods}>
         <form
           onSubmit={methods.handleSubmit(onSubmit)}
-          className="max-w-lg mx-auto bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4">
+          className="max-w-lg mx-auto bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4"
+        >
           <div className="mb-4">
             {/* Existing TextInput fields */}
             <TextInput name="name" label="Name" type="text" />
@@ -83,7 +85,8 @@ export default function Home() {
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
               type="submit"
-              disabled={isLoading}>
+              disabled={isLoading}
+            >
               {isLoading ? (
                 <span className="loading loading-spinner loading-sm"></span>
               ) : (
