@@ -4,13 +4,14 @@ import { Bars3Icon, BugAntIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, { useCallback, useRef, useState } from "react";
+import React, { use, useCallback, useEffect, useRef, useState } from "react";
 import { useAccount } from "wagmi";
 import {
   FaucetButton,
   RainbowKitCustomConnectButton,
 } from "~~/components/scaffold-eth";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
+import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
 
 type HeaderMenuLink = {
   label: string;
@@ -39,10 +40,31 @@ const connectedMenuLinks: HeaderMenuLink[] = [
 
 export const HeaderMenuLinks = () => {
   const pathname = usePathname();
-  const { isConnected } = useAccount();
+  const { isConnected,address } = useAccount();
+  const { data: myData } = useScaffoldContractRead({
+    contractName: "UrbanOdyssey",
+    functionName: "isRegistered",
+    args: [address],
+  });
+  // eslint-disable-next-line prefer-const
 
-  const menuLinks = isConnected ? [...baseMenuLinks, ...connectedMenuLinks] : baseMenuLinks;
+  const [menuLinks, setMenuLinks] = useState(baseMenuLinks);
 
+  useEffect(() => {
+    if (isConnected) {
+      let links = [...baseMenuLinks, ...connectedMenuLinks];
+      if (myData) {
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+
+        links = links.filter((link) => link.href != "/registration");
+      }
+      setMenuLinks(links);
+    } else {
+      setMenuLinks(baseMenuLinks);
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [myData, isConnected]);
   return (
     <>
       {menuLinks.map(({ label, href, icon }) => {
