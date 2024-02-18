@@ -61,8 +61,20 @@ export default function Home() {
       const latitude = location.coords.latitude;
       const longitude = location.coords.longitude;
       console.log("Latitude", latitude, "Longitude", longitude);
-      const _lat: number | undefined = Number(latitude.toFixed(7)) * 10000000;
-      const _long: number | undefined = Number(longitude.toFixed(7)) * 10000000;
+      const _lat: bigint | undefined = BigInt(
+        parseInt(
+          (
+            parseFloat(Number(latitude.toFixed(7)).toString()) * 10000000
+          ).toString()
+        )
+      );
+      const _long: bigint | undefined = BigInt(
+        parseInt(
+          (
+            parseFloat(Number(longitude.toFixed(7)).toString()) * 10000000
+          ).toString()
+        )
+      );
       console.log("_lat", _lat, "_long", _long);
       if (!_lat || !_long) {
         console.error("Invalid latitude or longitude");
