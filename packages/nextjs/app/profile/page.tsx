@@ -1,14 +1,22 @@
 "use client";
 
-import DynamicMap from "../../components/Map";
 import type { NextPage } from "next";
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 import NestedLayoutForWallet from "~~/components/NestedLayoutForWallet";
 import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
 
+const DynamicMap = dynamic(() => import("~~/components/Map"), {
+  ssr: false,
+});
+
 const Home: NextPage = () => {
+  const [location, setLocation] = useState({
+    coords: { latitude: 0, longitude: 0 },
+  });
+
   const { address, isConnected } = useAccount();
   const { data: playerData } = useScaffoldContractRead({
     contractName: "UrbanOdyssey",
@@ -16,7 +24,12 @@ const Home: NextPage = () => {
     args: [address],
   });
 
-
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition((e) => {
+      console.log(e);
+      setLocation(e);
+    });
+  }, []);
 
   return (
     <NestedLayoutForWallet>
@@ -84,7 +97,14 @@ const Home: NextPage = () => {
         )}
 
         <div className="w-2/3 mt-6">
-          <DynamicMap />
+          {location?.coords?.latitude !== 0 && (
+            <DynamicMap
+              position={[
+                location?.coords?.latitude,
+                location?.coords?.longitude,
+              ]}
+            />
+          )}
         </div>
       </div>
     </NestedLayoutForWallet>
