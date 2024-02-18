@@ -8,16 +8,6 @@ import { useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
 export default function Home() {
   const methods = useForm();
 
-  const handleImageChange = (e) => {
-    if (e.target.files && e.target.files[0]) {
-      const img = e.target.files[0];
-      setSelectedImage({
-        imageFile: img,
-        previewURL: URL.createObjectURL(img),
-      });
-    }
-  };
-
   const { writeAsync, isLoading } = useScaffoldContractWrite({
     contractName: "UrbanOdyssey",
     functionName: "registerPlayer",
