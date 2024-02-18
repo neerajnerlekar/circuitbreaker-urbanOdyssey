@@ -818,7 +818,7 @@ const deployedContracts = {
   },
   534351: {
     UrbanOdyssey: {
-      address: "0x2F201F5229A227Fbf9Bf761e36802164A34fF105",
+      address: "0x80E7d72BEb5E16ee12b261366601949FCf269C0A",
       abi: [
         {
           inputs: [],
