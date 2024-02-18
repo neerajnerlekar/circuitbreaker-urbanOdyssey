@@ -20,6 +20,7 @@ export default function Home() {
     imageFile: File | null;
     previewURL: string | null;
   } | null>(null);
+  
   const [location, setLocation] = useState({
     coords: { latitude: 0, longitude: 0 },
   });
