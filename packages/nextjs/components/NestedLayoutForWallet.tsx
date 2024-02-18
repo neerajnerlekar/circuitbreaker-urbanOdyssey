@@ -8,17 +8,12 @@ const NestedLayoutForWallet = ({ children }: { children: ReactElement }) => {
   const { isConnected, address } = useAccount();
   const router = useRouter();
 
-  const { data: myData } = useScaffoldContractRead({
-    contractName: "UrbanOdyssey",
-    functionName: "isRegistered",
-    args: [address],
-  });
+
   useEffect(() => {
+ 
     if (!isConnected) {
       router.push("/");
-    } else if (!myData) {
-      router.push("/registration");
-    }
+    } 
   }, []);
 
   return <div>{children}</div>;
