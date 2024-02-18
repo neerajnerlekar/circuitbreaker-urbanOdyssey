@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { FormProvider, useForm } from "react-hook-form";
 import TextInput from "~~/components/scaffold-eth/Input/TextInput";
 import { useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
-import NestedLayoutForWallet from "~~/components/NestedLayoutForWallet";
+import NestedLayoutForWallet from "~~/components/NestedLayoutForWallet";  
 
 export default function Home() {
   const methods = useForm();
@@ -18,7 +18,7 @@ export default function Home() {
       router.push("/dashboard");
     },
   });
-
+ 
   const onSubmit = async (data: any) => {
     console.log("Register button clicked");
     const msg = `Register`;

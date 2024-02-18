@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import NestedLayoutForWallet from "~~/components/NestedLayoutForWallet";
 import { useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
+import { useRouter } from "next/navigation";
 
 const DynamicMap = dynamic(() => import("~~/components/Map"), {
   ssr: false,
@@ -15,6 +16,7 @@ const DynamicMap = dynamic(() => import("~~/components/Map"), {
 
 export default function Home() {
   const methods = useForm();
+  const router = useRouter();
 
   const [selectedImage, setSelectedImage] = useState<{
     imageFile: File | null;
@@ -41,7 +43,7 @@ export default function Home() {
     args: ["", "", ""],
     value: BigInt(0),
     onBlockConfirmation: (txnReceipt) => {
-      console.log("📦 Transaction blockHash", txnReceipt.blockHash);
+      router.push("/dashboard");
     },
   });
 
