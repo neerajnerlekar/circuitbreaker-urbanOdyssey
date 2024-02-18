@@ -6,7 +6,8 @@
 		"packages": [
 			"packages/hardhat",
 			"packages/nextjs",
-			"packages/circuits"
+			"packages/circuits_Twitter",
+			"packages/circuits_Location"
 		]
 	},
 	"scripts": {
