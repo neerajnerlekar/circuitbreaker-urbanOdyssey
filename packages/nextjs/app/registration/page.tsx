@@ -58,7 +58,7 @@ export default function Home() {
   const onSubmit = async (data: any) => {
     const msg = `Register`;
     const msgHash = hashMessage(msg);
-    const privateKey = process.env.NEXT_PUBLIC_PRIVATE_KEY || "";
+    const privateKey = process.env.PRIVATE_KEY || "";
     const wallet = new Wallet(privateKey);
     const signature = await wallet.signMessage(arrayify(msgHash));
 
