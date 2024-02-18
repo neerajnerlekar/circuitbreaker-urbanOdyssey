@@ -1,68 +1,67 @@
-'use client'
+"use client";
 
-import Image from 'next/image'
-import { useRouter } from 'next/navigation'
-import React from 'react'
-import { useAccount } from 'wagmi'
-import NestedLayoutForWallet from '~~/components/NestedLayoutForWallet'
-import { Address } from '~~/components/scaffold-eth'
-import { useScaffoldContractRead } from '~~/hooks/scaffold-eth'
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import React from "react";
+import { useAccount } from "wagmi";
+import NestedLayoutForWallet from "~~/components/NestedLayoutForWallet";
+import { Address } from "~~/components/scaffold-eth";
+import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
 
 // Define the type for the place object
 type Place = {
-  registeredBy: string
-  level: number
-  placeName: string
-  placeType: string
-  faction: number
-}
+  registeredBy: string;
+  level: number;
+  placeName: string;
+  placeType: string;
+  faction: number;
+};
 
 const Page = () => {
-  const { address, isConnected } = useAccount()
+  const { address, isConnected } = useAccount();
   const { data: myData } = useScaffoldContractRead({
-    contractName: 'UrbanOdyssey',
-    functionName: 'players',
+    contractName: "UrbanOdyssey",
+    functionName: "players",
     args: [address],
-  })
+  });
 
   const { data: energyBalance } = useScaffoldContractRead({
-    contractName: 'UrbanOdyssey',
-    functionName: 'getENERGYBalance',
+    contractName: "UrbanOdyssey",
+    functionName: "getENERGYBalance",
     args: [address],
-  })
+  });
 
   const { data: chipsBalance } = useScaffoldContractRead({
-    contractName: 'UrbanOdyssey',
-    functionName: 'getCHIPSBalance',
+    contractName: "UrbanOdyssey",
+    functionName: "getCHIPSBalance",
     args: [address],
-  })
+  });
 
-  const faction = myData?.[5]
-  faction == 0 ? chipsBalance : energyBalance
+  const faction = myData?.[5];
+  faction == 0 ? chipsBalance : energyBalance;
 
-  const [myPlaces, setMyPlaces] = React.useState<Place[] | null>(null)
+  const [myPlaces, setMyPlaces] = React.useState<Place[] | null>(null);
   const { data: myPlacesData } = useScaffoldContractRead({
-    contractName: 'UrbanOdyssey',
-    functionName: 'getAllLocations',
-  })
+    contractName: "UrbanOdyssey",
+    functionName: "getAllLocations",
+  });
   const handleMyPlaces = () => {
-    setMyPlaces(myPlacesData)
-  }
+    setMyPlaces(myPlacesData as Place[]);
+  };
 
-  const [allPlaces, setAllPlaces] = React.useState<Place[] | null>(null)
+  const [allPlaces, setAllPlaces] = React.useState<Place[] | null>(null);
   const { data: allPlacesData } = useScaffoldContractRead({
-    contractName: 'UrbanOdyssey',
-    functionName: 'getAllLocations',
-  })
+    contractName: "UrbanOdyssey",
+    functionName: "getAllLocations",
+  });
   const handleAllPlaces = () => {
-    setAllPlaces(allPlacesData)
-  }
+    setAllPlaces(allPlacesData as Place[]);
+  };
 
-  const router = useRouter()
+  const router = useRouter();
   const handleNewPlaceSubmit = () => {
-    console.log('clicked')
-    router.push('/location')
-  }
+    router.push("/location");
+  };
   return (
     <NestedLayoutForWallet>
       <div className="flex h-screen text-black">
@@ -106,44 +105,51 @@ const Page = () => {
               </p>
             </div>
           </div>
-          {allPlaces?.map((place, index) => {
-            const baseIfpsUrl = 'https://ipfs.io/ipfs/'
-            const { registeredBy, level, placeName, placeType, faction } = place
-            return (
-              <div className="card w-64 bg-base-100 shadow-xl mb-6" key={index}>
-                <figure>
-                  <Image
-                    src={`${baseIfpsUrl}bafkreietcrmhbmbutgglkg4g2mg2dep5b4d3ngdkbte4n3s53rzrxwihti`}
-                    alt={placeName}
-                    width={500}
-                    height={150}
-                    className="rounded-lg"
-                  />
-                </figure>
-                <div className="card-body">
-                  <h2 className="card-title text-sm">
-                    Registered By: <Address address={registeredBy} />
-                  </h2>
-                  <h2 className="card-title text-xs">
-                    Location: {placeName.toLocaleUpperCase()}
-                  </h2>
-                  <p className="text-sm">
-                    Location Type: {placeType.toUpperCase()}
-                  </p>
-                  <div className="card-actions justify-end">
-                    <div className="badge badge-outline">Level: {level}</div>
-                    <div className="badge badge-outline">
-                      {faction == 0 ? 'EcoGuardian' : 'TechnoMad'}
+
+          <div className="flex flex-row ">
+            {allPlaces?.map((place, index) => {
+              const baseIfpsUrl = "https://ipfs.io/ipfs/";
+              const { registeredBy, level, placeName, placeType, faction } =
+                place;
+              return (
+                <div
+                  className="card w-64 bg-base-100 shadow-xl mb-6 m-10"
+                  key={index}
+                >
+                  <figure>
+                    <Image
+                      src={`${baseIfpsUrl}bafkreietcrmhbmbutgglkg4g2mg2dep5b4d3ngdkbte4n3s53rzrxwihti`}
+                      alt={placeName}
+                      width={500}
+                      height={150}
+                      className="rounded-lg"
+                    />
+                  </figure>
+                  <div className="card-body">
+                    <h2 className="card-title text-sm">
+                      Registered By: <Address address={registeredBy} />
+                    </h2>
+                    <h2 className="card-title text-xs">
+                      Location: {placeName.toLocaleUpperCase()}
+                    </h2>
+                    <p className="text-sm">
+                      Location Type: {placeType.toUpperCase()}
+                    </p>
+                    <div className="card-actions justify-end">
+                      <div className="badge badge-outline">Level: {level}</div>
+                      <div className="badge badge-outline">
+                        {faction == 0 ? "EcoGuardian" : "TechnoMad"}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            )
-          })}
+              );
+            })}
+          </div>
         </div>
       </div>
     </NestedLayoutForWallet>
-  )
-}
+  );
+};
 
-export default Page
+export default Page;
