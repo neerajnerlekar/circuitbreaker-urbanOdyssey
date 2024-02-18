@@ -75,9 +75,10 @@ export const HeaderMenuLinks = () => {
               href={href}
               passHref
               className={`${
-                isActive ? "bg-secondary shadow-md" : ""
-              } hover:bg-secondary hover:shadow-md focus:!bg-secondary active:!text-neutral py-1.5 px-3 text-sm rounded-full gap-2 grid grid-flow-col`}
-            >
+                isActive
+                  ? "bg-primary rounded-full shadow-lg"
+                  : "shadow-md rounded-full"
+              } hover:bg-secondary hover:shadow-md focus:!bg-secondary active:!text-neutral py-1.5 px-3 text-sm rounded-full gap-2 grid grid-flow-col`}>
               {icon}
               <span>{label}</span>
             </Link>
@@ -110,8 +111,7 @@ export const Header = () => {
             }`}
             onClick={() => {
               setIsDrawerOpen((prevIsOpenState) => !prevIsOpenState);
-            }}
-          >
+            }}>
             <Bars3Icon className="h-1/2" />
           </label>
           {isDrawerOpen && (
@@ -120,8 +120,7 @@ export const Header = () => {
               className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
               onClick={() => {
                 setIsDrawerOpen(false);
-              }}
-            >
+              }}>
               <HeaderMenuLinks />
             </ul>
           )}
@@ -129,8 +128,7 @@ export const Header = () => {
         <Link
           href="/"
           passHref
-          className="hidden lg:flex items-center gap-2 ml-4 mr-6 shrink-0"
-        >
+          className="hidden lg:flex items-center gap-2 ml-4 mr-6 shrink-0">
           <div className="flex relative w-10 h-10">
             <Image
               alt="SE2 logo"
