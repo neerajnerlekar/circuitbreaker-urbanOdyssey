@@ -313,6 +313,21 @@ const deployedContracts = {
                   name: "faction",
                   type: "uint8",
                 },
+                {
+                  internalType: "int256",
+                  name: "lat",
+                  type: "int256",
+                },
+                {
+                  internalType: "int256",
+                  name: "long",
+                  type: "int256",
+                },
+                {
+                  internalType: "string",
+                  name: "ipfsURI",
+                  type: "string",
+                },
               ],
               internalType: "struct Structs.Location[]",
               name: "",
@@ -481,6 +496,21 @@ const deployedContracts = {
               name: "faction",
               type: "uint8",
             },
+            {
+              internalType: "int256",
+              name: "lat",
+              type: "int256",
+            },
+            {
+              internalType: "int256",
+              name: "long",
+              type: "int256",
+            },
+            {
+              internalType: "string",
+              name: "ipfsURI",
+              type: "string",
+            },
           ],
           stateMutability: "view",
           type: "function",
@@ -569,6 +599,16 @@ const deployedContracts = {
               internalType: "string",
               name: "_uri",
               type: "string",
+            },
+            {
+              internalType: "int256",
+              name: "_lat",
+              type: "int256",
+            },
+            {
+              internalType: "int256",
+              name: "_long",
+              type: "int256",
             },
           ],
           name: "registerAndVerifyPlace",
@@ -822,7 +862,7 @@ const deployedContracts = {
   },
   534351: {
     UrbanOdyssey: {
-      address: "0x5524bD1612043ad57218fa22359615203904ba2B",
+      address: "0xEF40D650d957Ab219E99c07d34801C92Cbd21EDD",
       abi: [
         {
           inputs: [],
@@ -1128,6 +1168,21 @@ const deployedContracts = {
                   name: "faction",
                   type: "uint8",
                 },
+                {
+                  internalType: "int256",
+                  name: "lat",
+                  type: "int256",
+                },
+                {
+                  internalType: "int256",
+                  name: "long",
+                  type: "int256",
+                },
+                {
+                  internalType: "string",
+                  name: "ipfsURI",
+                  type: "string",
+                },
               ],
               internalType: "struct Structs.Location[]",
               name: "",
@@ -1296,6 +1351,21 @@ const deployedContracts = {
               name: "faction",
               type: "uint8",
             },
+            {
+              internalType: "int256",
+              name: "lat",
+              type: "int256",
+            },
+            {
+              internalType: "int256",
+              name: "long",
+              type: "int256",
+            },
+            {
+              internalType: "string",
+              name: "ipfsURI",
+              type: "string",
+            },
           ],
           stateMutability: "view",
           type: "function",
@@ -1384,6 +1454,16 @@ const deployedContracts = {
               internalType: "string",
               name: "_uri",
               type: "string",
+            },
+            {
+              internalType: "int256",
+              name: "_lat",
+              type: "int256",
+            },
+            {
+              internalType: "int256",
+              name: "_long",
+              type: "int256",
             },
           ],
           name: "registerAndVerifyPlace",
