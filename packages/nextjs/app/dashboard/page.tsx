@@ -1,12 +1,14 @@
 "use client"
 
 import React from "react";
+import { useRouter } from "next/navigation";
 
-const page = () => {
+const Page = () => {
+  const router = useRouter();
   const handleNewPlaceSubmit = () => {
     console.log("clicked");
-    // router.push("/dashboard");
-    // Check for the status of the user info and allow the user to play the game and set the navigation accordingly
+    router.push("/location");
+    
   };
   return (
     <div className="flex h-screen text-black">
@@ -43,4 +45,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

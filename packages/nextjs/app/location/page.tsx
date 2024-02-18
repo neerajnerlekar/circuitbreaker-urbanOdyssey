@@ -1,6 +1,6 @@
 "use client";
 
-import TextInput from "../../../components/scaffold-eth/Input/TextInput";
+import TextInput from "../../components/scaffold-eth/Input/TextInput";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { NFTStorage } from "nft.storage";
@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
 
-const DynamicMap = dynamic(() => import("../../../components/Map"), {
+const DynamicMap = dynamic(() => import("../../components/Map"), {
   loading: () => <p>Loading...</p>,
 });
 

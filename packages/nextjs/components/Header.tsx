@@ -33,7 +33,7 @@ const connectedMenuLinks: HeaderMenuLink[] = [
   },
   {
     label: "Location Form",
-    href: "/registration/location",
+    href: "/location",
   },
 ];
 
