@@ -16,6 +16,7 @@ const NestedLayoutForWallet = ({ children }: { children: ReactElement }) => {
     ) {
       router.push("/dashboard");
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return <div>{children}</div>;

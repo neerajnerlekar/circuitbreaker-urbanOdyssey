@@ -45,6 +45,7 @@ const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
       // // Redirect to the new page if the wallet is disconnected
       router.push("/");
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isConnected, router]);
   useEffect(() => {
     if (price > 0) {
