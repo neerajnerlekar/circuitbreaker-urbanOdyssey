@@ -93,7 +93,7 @@ const Page = () => {
           </button>
         </div>
 
-        <div className="flex-1 flex flex-col ">
+        <div className="flex-1 overflow-auto ">
           <div className="flex justify-around p-4">
             <div className="flex flex-col items-center">
               <span className="icon lightning-bolt"></span>
@@ -113,7 +113,7 @@ const Page = () => {
             </div>
           </div>
 
-          <div className="flex flex-row ">
+          <div className="grid grid-cols-4 gap-4 p-4 ">
             {places?.map((place, index) => {
               const baseIfpsUrl = "https://ipfs.io/ipfs/";
               const { registeredBy, level, placeName, placeType, faction } =
