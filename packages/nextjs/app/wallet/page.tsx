@@ -16,7 +16,7 @@ const Home: NextPage = () => {
     args: [address],
   });
 
-  if (typeof window === "undefined") return null;
+
 
   return (
     <NestedLayoutForWallet>
