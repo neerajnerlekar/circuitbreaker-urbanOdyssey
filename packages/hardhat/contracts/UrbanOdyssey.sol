@@ -17,6 +17,8 @@ contract UrbanOdyssey is ERC1155, OdysseyStorage {
         tokenURIs[CHIPS] = "https://ipfs.io/ipfs/bafkreietcrmhbmbutgglkg4g2mg2dep5b4d3ngdkbte4n3s53rzrxwihti";
     }
 
+    receive() external payable {}
+
     function registerPlayer(
         string memory _name,
         string memory _homeTown,
@@ -75,6 +77,9 @@ contract UrbanOdyssey is ERC1155, OdysseyStorage {
             faction: players[msg.sender].faction
         });
 
+        players[msg.sender].registeredPlaces++;
+        players[msg.sender].verifiedPlaces++;
+
         _mint(msg.sender, locationCounter, 1, "");
         tokenURIs[locationCounter] = _uri;
         ++locationCounter;
@@ -82,14 +87,14 @@ contract UrbanOdyssey is ERC1155, OdysseyStorage {
 
     function getAllLocations() public view returns (Structs.Location[] memory) {
         uint256 counter = locationCounter - 10;
-        Structs.Location[] memory allLocations = new Structs.Location[](counter);
+        Structs.Location[] memory allLocations = new Structs.Location[](counter+1);
 
-        for (uint256 i = 10; i <= locationCounter; ++i) {
-            allLocations[i].registeredBy = locations[i].registeredBy;
-            allLocations[i].placeName = locations[i].placeName;
-            allLocations[i].placeType = locations[i].placeType;
-            allLocations[i].level = locations[i].level;
-            allLocations[i].faction = locations[i].faction;
+        for (uint256 i = 0; i < locationCounter - 10; ++i) {
+            allLocations[i].registeredBy = locations[i + 10].registeredBy;
+            allLocations[i].placeName = locations[i + 10].placeName;
+            allLocations[i].placeType = locations[i + 10].placeType;
+            allLocations[i].level = locations[i + 10].level;
+            allLocations[i].faction = locations[i + 10].faction;
         }
 
         return allLocations;
