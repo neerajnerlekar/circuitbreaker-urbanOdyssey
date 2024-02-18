@@ -79,6 +79,9 @@ export default function Home() {
       setLocation(e);
     });
   }, []);
+
+  if (typeof window === "undefined") return null;
+
   return (
     <NestedLayoutForWallet>
     <div className="container mx-auto px-4 py-8">

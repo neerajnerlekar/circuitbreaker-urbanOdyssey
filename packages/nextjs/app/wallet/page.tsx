@@ -12,6 +12,9 @@ const Home: NextPage = () => {
     functionName: "players",
     args: [address],
   });
+
+  if (typeof window === "undefined") return null;
+
   return (
     <NestedLayoutForWallet>
       <div className="flex items-center flex-col flex-grow pt-10">

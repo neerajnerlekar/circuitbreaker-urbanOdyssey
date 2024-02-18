@@ -25,7 +25,6 @@ export default function Home() {
     const msgHash = hashMessage(msg);
     const privateKey = process.env.NEXT_PUBLIC_PRIVATE_KEY || "";
     const wallet = new Wallet(privateKey);
-    console.log("Address corresponding to private key:", wallet.address);
     const signature = await wallet.signMessage(arrayify(msgHash));
     console.log({
       msgHash: msgHash,
@@ -39,7 +38,7 @@ export default function Home() {
           data.homeTown,
           msgHash as `0x${string}`,
           signature as `0x${string}`,
-          1,
+          parseInt(data.team),
         ],
       });
       console.log("Data submitted", data);
@@ -52,8 +51,7 @@ export default function Home() {
       <FormProvider {...methods}>
         <form
           onSubmit={methods.handleSubmit(onSubmit)}
-          className="max-w-lg mx-auto bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4"
-        >
+          className="max-w-lg mx-auto bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4">
           <div className="mb-4">
             {/* Existing TextInput fields */}
             <TextInput name="name" label="Name" type="text" />
@@ -61,13 +59,13 @@ export default function Home() {
 
             <div className="mb-4">
               <span className="block text-gray-700 text-sm font-bold mb-2">
-                Team
+                Faction
               </span>
               <label className="inline-flex items-center mr-4">
                 <input
                   {...methods.register("team")}
                   type="radio"
-                  value="EcoGuardian"
+                  value="0"
                   className="form-radio"
                 />
                 <span className="ml-2">EcoGuardian</span>
@@ -76,7 +74,7 @@ export default function Home() {
                 <input
                   {...methods.register("team")}
                   type="radio"
-                  value="TechnoMad"
+                  value="1"
                   className="form-radio"
                 />
                 <span className="ml-2">TechnoMad</span>
@@ -87,8 +85,7 @@ export default function Home() {
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
               type="submit"
-              disabled={isLoading}
-            >
+              disabled={isLoading}>
               {isLoading ? (
                 <span className="loading loading-spinner loading-sm"></span>
               ) : (
