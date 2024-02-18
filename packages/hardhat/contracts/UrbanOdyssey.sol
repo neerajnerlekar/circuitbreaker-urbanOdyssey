@@ -75,16 +75,16 @@ contract UrbanOdyssey is ERC1155, OdysseyStorage {
             faction: players[msg.sender].faction
         });
 
-        ++locationCounter;
         _mint(msg.sender, locationCounter, 1, "");
         tokenURIs[locationCounter] = _uri;
+        ++locationCounter;
     }
 
     function getAllLocations() public view returns (Structs.Location[] memory) {
         uint256 counter = locationCounter - 10;
         Structs.Location[] memory allLocations = new Structs.Location[](counter);
 
-        for (uint256 i = 11; i <= locationCounter; ++i) {
+        for (uint256 i = 10; i <= locationCounter; ++i) {
             allLocations[i].registeredBy = locations[i].registeredBy;
             allLocations[i].placeName = locations[i].placeName;
             allLocations[i].placeType = locations[i].placeType;
