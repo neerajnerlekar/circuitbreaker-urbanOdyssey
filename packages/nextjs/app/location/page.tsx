@@ -3,12 +3,12 @@
 import TextInput from "../../components/scaffold-eth/Input/TextInput";
 import dynamic from "next/dynamic";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { NFTStorage } from "nft.storage";
 import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import NestedLayoutForWallet from "~~/components/NestedLayoutForWallet";
 import { useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
-import { useRouter } from "next/navigation";
 
 const DynamicMap = dynamic(() => import("~~/components/Map"), {
   ssr: false,
@@ -40,7 +40,7 @@ export default function Home() {
   const { writeAsync, isLoading } = useScaffoldContractWrite({
     contractName: "UrbanOdyssey",
     functionName: "registerAndVerifyPlace",
-    args: ["", "", "", 0, 0],
+    args: ["", "", "", BigInt(0), BigInt(0)],
     value: BigInt(0),
     onBlockConfirmation: (txnReceipt) => {
       router.push("/dashboard");
@@ -48,9 +48,13 @@ export default function Home() {
   });
 
   const onSubmit = (formData: any) => {
-    let ipfsCID = ""; // IPFS Content Identifier
-
-    const handleSubmission = () => {
+    const handleSubmission = ({
+      ipfsCID,
+      ipfsCIDmust = false,
+    }: {
+      ipfsCID: string;
+      ipfsCIDmust?: boolean;
+    }) => {
       console.log("handling write");
       console.log("Form data submitted", formData);
       console.log("IPFS CID", ipfsCID);
@@ -60,9 +64,35 @@ export default function Home() {
       const _lat: number | undefined = Number(latitude.toFixed(7)) * 10000000;
       const _long: number | undefined = Number(longitude.toFixed(7)) * 10000000;
       console.log("_lat", _lat, "_long", _long);
-      writeAsync({
-        args: [formData.name, formData.place, ipfsCID, _lat, _long],
-      });
+      if (!_lat || !_long) {
+        console.error("Invalid latitude or longitude");
+        return;
+      } else if (ipfsCIDmust) {
+        if (!ipfsCID) {
+          console.error("IPFS CID not found");
+          return;
+        } else {
+          writeAsync({
+            args: [
+              formData.name,
+              formData.place,
+              ipfsCID,
+              BigInt(_lat),
+              BigInt(_long),
+            ],
+          });
+        }
+      } else {
+        writeAsync({
+          args: [
+            formData.name,
+            formData.place,
+            ipfsCID,
+            BigInt(_lat),
+            BigInt(_long),
+          ],
+        });
+      }
     };
 
     if (selectedImage && selectedImage.imageFile) {
@@ -72,15 +102,14 @@ export default function Home() {
       client
         .storeBlob((selectedImage as any).imageFile)
         .then((cid) => {
-          ipfsCID = cid;
-          console.log("IPFS CID", ipfsCID);
-          handleSubmission();
+          console.log("IPFS CID", cid);
+          handleSubmission(cid, true);
         })
         .catch((error) => {
           console.error("Error storing blob:", error);
         });
     } else {
-      handleSubmission();
+      handleSubmission("", false);
     }
   };
 
